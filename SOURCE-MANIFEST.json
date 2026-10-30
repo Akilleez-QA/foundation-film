@@ -11,7 +11,7 @@
     "CONTRIBUTING.md": "9ed1fe3efc3c3f000b98754c6909fa978112d9f6540952a4e8e0fdddedd3c01e",
     "LICENSE": "fb981668c18a279e285fc4d83fba1e836cc84dd4daa73c9697d3cfd2d8aca6e0",
     "NOTICE.md": "612fed4775eecf3503432401df1638b8f394d5d4ef3c8aa25195d6360630a289",
-    "README.md": "cda319ce42fa0838a9cd0f7e287cddf553b681ee2a54e8839c652819f0bcbd73",
+    "README.md": "a32bd36f177e3f45792051584c70b6302019234d115eb6ef9a8b005a65c568aa",
     "SECURITY.md": "7e14a8a25cb03c7055f8966e9ca2052de5f818bc3fbfe825c9a916c1e9463990",
     "SUPPORT.md": "e3ebb589274d55dc463a69c7ca0843edd2bdf2bda01efa3f88be7c03681c343c",
     "docs/README.md": "a75d462384ee13bd21c1a3fd13fa82c3e909f284d5e664a58cdffa8715ad9a93",
@@ -38,9 +38,9 @@
     "foundation_film_bridge/schemas.py": "94a2adf2d19d102143f11974a6ffb999bc260c66d557f9743b51347fc0ae8d8b",
     "foundation_film_bridge/server.py": "482e3f6681f67a49ac11b204d723915ed0e02b884ad60a926eb159530d06ba9f",
     "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "tests/test_bridge.py": "349a04927f71c2ca9d800edd3ab7e46ed8d63baaf6afcfbacbcfac81dacc75e9",
+    "tests/test_bridge.py": "4e4e4ddca16e75f1348d590c683a880551bb9cc7f70393d4e5d3e8517d4df2eb",
     "tests/test_tools.py": "e9bd59ce5d048149c1ee4259c2a0850472c839e816b39cda1818fa0c34870e14",
-    "tools/build_manifest.py": "0f5d98340974911946bafd962f2face7bd8961cf47013e29802d48d26b841cbd"
+    "tools/build_manifest.py": "a0c652b916851450f840bea6b621f886739d7950eb4035ad993a4179a437bfe0"
   },
   "schema": "foundation-film-source-manifest/1",
   "version": "0.1.0"
