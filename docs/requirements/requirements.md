@@ -16,3 +16,4 @@ Shall statements for foundation-film. Verification methods: T test, A analysis, 
 | REQ-FILM-010 | Every result shall carry `receipt.input_sha256` computed from the request. | The host recomputes it to bind result to request. | T |
 | REQ-FILM-011 | The bridge shall run with the Python standard library only, with no network and no caller-controlled paths. | Bounded, reproducible execution. | I |
 | REQ-FILM-012 | The bridge shall reject inputs that exceed its frame, depth, node, string or integer limits. | Bounded execution on both sides. | T |
+| REQ-FILM-013 | An optional local video producer shall detect shots and measure camera motion and visual properties, emitting integer milliseconds and milli-unit metrics accepted by the cinematic tools, without adding dependencies to the bridge. | Receive the visual measurement core from Endoforge. | T |

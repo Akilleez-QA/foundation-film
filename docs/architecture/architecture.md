@@ -13,6 +13,7 @@ foundation-film is one Foundation. A Foundation owns the meaning, data and accep
 | Schemas | `foundation_film_bridge/schemas.py` | Tool inventory and input/output schemas |
 | Manifest tool | `tools/build_manifest.py` | Writes `SOURCE-MANIFEST.json`, prints the three pins |
 | Tests | `tests/` | Unit and bridge tests |
+| Optional offline producer | `foundation_film/filmstats.py` | Local video decoding, shot detection and visual measurements; lazy NumPy, OpenCV and PySceneDetect imports |
 
 ## Tools
 
@@ -33,3 +34,11 @@ Host request → bridge input limits → schema validation → domain function �
 
 - Read-only observations only. A verdict is not an acceptance decision.
 - Standard library only, so the source can be hashed and pinned as a whole.
+
+The bridge and its acceptance functions remain standard-library-only. The optional
+producer runs separately: video → content/adaptive shot boundaries → sampled BGR
+frames → affine optical flow and still-image statistics → validated shot arguments.
+The sampling rate uses native fps divided by the actual frame step. The producer
+retains Endoforge's zero-motion fallback when optical flow has too few features;
+static classification alone is not evidence of successful motion tracking.
+The producer retains sampled frames in memory and is intended for local inputs.

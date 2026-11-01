@@ -20,3 +20,15 @@
 3. The consumer grants only the `read` effect.
 4. A change to any shipped file changes the manifest pin. The consumer repins in the same change that updates its vendored copy.
 
+## Offline measurement interface
+
+`python -B -m foundation_film.filmstats VIDEO [--fps 8] [--width 640]` prints one
+JSON object with `shots` on stdout. Each shot has `start_ms`, `end_ms`, `camera`
+and `metrics`, validated by the existing cinematic input contract. Seconds and
+floating measurements become milliseconds/milli-units with half ties away from zero.
+The result can be supplied as `reference_bands` arguments, or extended with `bands`
+or `rules` for `cinematic_gate`. The producer is a local CLI, outside JSON-RPC;
+it accepts paths, requires NumPy/OpenCV/PySceneDetect, and emits no bridge receipt.
+It rejects empty or incomplete decodes and shots without sampled frames. It does
+not emit Endoforge's `summary.json`, audio, palette or contact-strip artifacts.
+

@@ -16,3 +16,4 @@ Command: `python -B -m unittest discover -s tests -t .` from the repository root
 | REQ-FILM-010 | T | tests/test_bridge.py | pass at baseline |
 | REQ-FILM-011 | I | inspection of source | pass at baseline |
 | REQ-FILM-012 | T | tests/test_requirement_limits.py: RequirementLimitsTests.test_req_film_012_input_limits, RequirementLimitsTests.test_req_film_012_stream_frame_limit | pass |
+| REQ-FILM-013 | T | tests/test_filmstats.py: rounding, dependency isolation, uniform images, translated texture, synthetic two-shot video/CLI, invalid inputs; full dependency command in README | pass with optional dependencies |
