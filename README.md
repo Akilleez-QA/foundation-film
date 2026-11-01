@@ -33,6 +33,22 @@ python -B -m unittest discover -s tests -t .
 python -B tools/build_manifest.py
 ```
 
+## Local video measurements
+
+The visual core of Endoforge's `tools/film/filmstats.py` now lives in
+`foundation_film/filmstats.py`. Run it locally with optional CPU dependencies:
+
+```
+uv run --no-project --python 3.12 --with numpy --with opencv-python-headless --with scenedetect python -B -m foundation_film.filmstats sample.avi --fps 8 --width 640 > shots.json
+```
+
+The output is the `{"shots": [...]}` argument object for `reference_bands` or
+`cinematic_gate` (add reference bands or rules for the gate). Times are milliseconds;
+all metrics are milli-units. This offline producer opens the supplied video and
+retains sampled frames in memory; it is outside the bounded stdio bridge.
+It ports shot detection, optical-flow camera classification and visual measures.
+Audio extraction, palettes, contact strips and legacy summary files are deferred.
+
 ## What is inside
 
 | Tool | Purpose |
@@ -46,7 +62,13 @@ python -B tools/build_manifest.py
 
 ## Measured
 
-23 tests pass with `python -B -m unittest discover -s tests -t .` on Python 3.14.8 in a fresh clone (normal and `-O`). CI: local only.
+31 tests pass on Python 3.12 with the optional producer dependencies (normal and `-O`).
+The standard-library suite skips four numerical/video producer tests. Run the full suite:
+
+```
+uv run --no-project --python 3.12 --with numpy --with opencv-python-headless --with scenedetect python -B -m unittest discover -s tests -t .
+uv run --no-project --python 3.12 --with numpy --with opencv-python-headless --with scenedetect python -B -O -m unittest discover -s tests -t .
+```
 
 ## Documentation
 
