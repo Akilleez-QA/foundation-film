@@ -12,7 +12,7 @@
     "CONTRIBUTING.md": "9ed1fe3efc3c3f000b98754c6909fa978112d9f6540952a4e8e0fdddedd3c01e",
     "LICENSE": "fb981668c18a279e285fc4d83fba1e836cc84dd4daa73c9697d3cfd2d8aca6e0",
     "NOTICE.md": "612fed4775eecf3503432401df1638b8f394d5d4ef3c8aa25195d6360630a289",
-    "README.md": "d626588926745693d8ad3a0e0c7c8640eb0d5859ad2ed54ed1ef1a7ac2277e5f",
+    "README.md": "0437fce06b1c445c747b4c6e49da882dfeb90e3879dbd73f28baad762006a2fa",
     "SECURITY.md": "7e14a8a25cb03c7055f8966e9ca2052de5f818bc3fbfe825c9a916c1e9463990",
     "SUPPORT.md": "e3ebb589274d55dc463a69c7ca0843edd2bdf2bda01efa3f88be7c03681c343c",
     "docs/README.md": "a75d462384ee13bd21c1a3fd13fa82c3e909f284d5e664a58cdffa8715ad9a93",
@@ -43,7 +43,8 @@
     "tests/test_filmstats.py": "6eeccd0d1da5e85f69c7e7e0dff479bfc49cbc81eaa61238cadee53157e64850",
     "tests/test_requirement_limits.py": "8874f5596c8badf2b8da1082953b9dfb1011d43e5dece9e932aa2d7ed0c90e88",
     "tests/test_tools.py": "e9bd59ce5d048149c1ee4259c2a0850472c839e816b39cda1818fa0c34870e14",
-    "tools/build_manifest.py": "e41c9f9fe36f944a1232cf257b3b83779a9b5c1380c636f51f3e673cba6ca7a2"
+    "tools/build_manifest.py": "e41c9f9fe36f944a1232cf257b3b83779a9b5c1380c636f51f3e673cba6ca7a2",
+    "tools/package_source.py": "d2c190f80abc14fa365774b8ef90619060bd9df3cf2c0009a3f5969c9b43e6d5"
   },
   "schema": "foundation-film-source-manifest/1",
   "version": "0.1.0"

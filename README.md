@@ -4,21 +4,7 @@
 
 Film-production acceptance checks as integer-only, read-only tools with Evidence on every result
 
-<img src="https://img.shields.io/badge/license-GPL--3.0--only-2400FF?style=flat-square&labelColor=000000"> <img src="https://img.shields.io/badge/python-3.11%2B-6E61FF?style=flat-square&labelColor=000000">
-
-## Family
-
-| Repository | Role | Relation |
-|---|---|---|
-| [cstack](https://github.com/Akilleez-QA/cstack) | Runs Foundations behind pinned adapters under one human approver | Host |
-| [foundation-engine](https://github.com/Akilleez-QA/foundation-engine) | TypeScript and three.js framework for browser games | Foundation |
-| [foundation-math](https://github.com/Akilleez-QA/foundation-math) | Exact mathematical kernels and physics research tools | Foundation |
-| [foundation-film](https://github.com/Akilleez-QA/foundation-film) | Film-production acceptance checks | Foundation |
-| [foundation-refrigeration](https://github.com/Akilleez-QA/foundation-refrigeration) | Refrigeration data and checks | Foundation |
-| [foundation-robotics](https://github.com/Akilleez-QA/foundation-robotics) | Physics checks for motion | Foundation |
-| [foundation-template](https://github.com/Akilleez-QA/foundation-template) | Minimal Foundation to copy for a new domain | Foundation |
-| [endoforge](https://github.com/Akilleez-QA/endoforge) | Workshop for running coding agents with checks and receipts | Tool |
-| [poodo](https://github.com/Akilleez-QA/poodo) | Reasoning skill that shows evidence before it acts | Tool |
+[<img src="https://img.shields.io/github/actions/workflow/status/Akilleez-QA/foundation-film/ci.yml?branch=main&style=flat-square&labelColor=000000" alt="CI">](https://github.com/Akilleez-QA/foundation-film/actions/workflows/ci.yml) <img src="https://img.shields.io/badge/license-GPL--3.0--only-2400FF?style=flat-square&labelColor=000000">
 
 ## Status
 
@@ -33,7 +19,7 @@ python -B -m unittest discover -s tests -t .
 python -B tools/build_manifest.py
 ```
 
-## Local video measurements
+### Local video measurements
 
 The visual core of Endoforge's `tools/film/filmstats.py` now lives in
 `foundation_film/filmstats.py`. Run it locally with optional CPU dependencies:
@@ -62,8 +48,7 @@ Audio extraction, palettes, contact strips and legacy summary files are deferred
 
 ## Measured
 
-31 tests pass on Python 3.12 with the optional producer dependencies (normal and `-O`).
-The standard-library suite skips four numerical/video producer tests. Run the full suite:
+At commit `e6e6405ba56a586ca197013a85e09ec57fc84e5f`, Python 3.12.14 passes 31 tests with no skips in each mode, including the optional producer dependencies:
 
 ```
 uv run --no-project --python 3.12 --with numpy --with opencv-python-headless --with scenedetect python -B -m unittest discover -s tests -t .
@@ -80,6 +65,19 @@ starting the bridge or importing `foundation_film.tools` to cite other locations
 The producer directory may include a trailing slash. These are citation locations;
 the tools do not open these files or require them to exist in this repository.
 
+## Related projects
+
+| Repository | Role | Relation |
+|---|---|---|
+| [cstack](https://github.com/Akilleez-QA/cstack) | Runs Foundations behind pinned adapters under one human approver | Host |
+| [foundation-engine](https://github.com/Akilleez-QA/foundation-engine) | TypeScript and three.js framework for browser games | Foundation |
+| [foundation-math](https://github.com/Akilleez-QA/foundation-math) | Exact mathematical kernels and physics research tools | Foundation |
+| [foundation-film](https://github.com/Akilleez-QA/foundation-film) | Film-production acceptance checks | Foundation |
+| [foundation-refrigeration](https://github.com/Akilleez-QA/foundation-refrigeration) | Refrigeration data and checks | Foundation |
+| [foundation-robotics](https://github.com/Akilleez-QA/foundation-robotics) | Physics checks for motion | Foundation |
+| [foundation-template](https://github.com/Akilleez-QA/foundation-template) | Minimal Foundation to copy for a new domain | Foundation |
+| [endoforge](https://github.com/Akilleez-QA/endoforge) | Workshop for running coding agents with checks and receipts | Tool |
+| [poodo](https://github.com/Akilleez-QA/poodo) | Reasoning skill that shows evidence before it acts | Tool |
 
 ## Layout
 
@@ -94,7 +92,11 @@ the tools do not open these files or require them to exist in this repository.
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Security
+
+See [SECURITY.md](SECURITY.md).
 
 ## License
 
