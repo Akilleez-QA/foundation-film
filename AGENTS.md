@@ -58,9 +58,11 @@ verify the video producer; interrupted or missing checks do not pass.
 ## Source and release boundaries
 
 [SOURCE-MANIFEST.json](SOURCE-MANIFEST.json) records shipped paths and SHA-256
-hashes. Regenerate it after every change, including documentation additions.
+hashes outside the root `.github/` tree. Regenerate it after every change to
+covered files, including documentation additions.
 The inventory test checks file membership and bytes; the generator excludes
-`.git`, `__pycache__`, `.pyc`, the manifest itself and `PR_BODY.md`. Keep temporary
+the root `.github/` tree, `.git`, `__pycache__`, `.pyc`, the manifest itself
+and `PR_BODY.md`. Keep temporary
 artifacts and dependency environments outside the checkout so they are not
 included. Never hand-edit hashes or weaken the inventory test to obtain a pass.
 

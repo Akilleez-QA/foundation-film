@@ -88,7 +88,7 @@ the tools do not open these files or require them to exist in this repository.
 | `tests/` | Unit and bridge tests |
 | `tools/` | Manifest and data tools |
 | `docs/` | Requirements, architecture, ICD, verification, configuration, guides |
-| `SOURCE-MANIFEST.json` | SHA-256 of every shipped file |
+| `SOURCE-MANIFEST.json` | SHA-256 of every shipped source file outside root `.github/` |
 
 ## Contributing
 
