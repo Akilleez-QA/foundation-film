@@ -29,7 +29,9 @@ Read [the interface contract](docs/icd/icd-cstack.md) for bridge or schema chang
 and [the architecture](docs/architecture/architecture.md) for producer boundaries.
 Keep requirements in [requirements.md](docs/requirements/requirements.md) aligned
 with [the verification matrix](docs/verification/verification-matrix.md); every
-new requirement needs a matrix row. Keep changes to one concern, about 400 lines
+new requirement needs a matrix row, and untested behaviour belongs in the
+requirements' gap list. Documentation follows the family standard indexed in
+[docs/README.md](docs/README.md). Keep changes to one concern, about 400 lines
 or less; open an issue first for work beyond a small fix.
 
 ## Verification
@@ -68,8 +70,8 @@ included. Never hand-edit hashes or weaken the inventory test to obtain a pass.
 
 Follow [configuration management](docs/configuration/configuration-management.md):
 consumers must repin the manifest hash, file count and canonical tool inventory
-hash when updating their vendored source. Tags require owner approval. Before
-pushing, follow its Gitleaks and TruffleHog scanning requirement.
+hash when updating their vendored source. Tags require owner approval. CI runs
+Gitleaks on the full history; run it locally before pushing when you can.
 
 Preserve GPL-3.0-only terms, [NOTICE.md](NOTICE.md), and the documented Endoforge
 producer provenance. Keep secrets and private media out of commits. Put rationale
