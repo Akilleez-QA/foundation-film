@@ -8,7 +8,9 @@ Film-production acceptance checks as integer-only, read-only tools with Evidence
 
 ## Status
 
-Version 0.1.0. 6 read-only tool(s) behind a stdio JSON-RPC bridge, standard library only. Every result carries Evidence and an input hash. A verdict is an observation, not an acceptance decision.
+Version 0.1.0, no release tag yet. Six read-only tools behind a stdio JSON-RPC bridge, standard library only, plus an optional offline video producer. Every result carries Evidence and an input hash. A verdict is an observation, not an acceptance decision.
+
+Classification: self-assessed Class E analog (research and general-purpose software), not safety-critical. This is not a NASA compliance determination. See the [software management plan](docs/plan/software-management-plan.md#1-software-classification-self-assessed).
 
 ## Quickstart
 
@@ -18,6 +20,8 @@ cd foundation-film
 python -B -m unittest discover -s tests -t .
 python -B tools/build_manifest.py
 ```
+
+The tests print `OK (skipped=4)`; the four skipped tests need the optional video libraries below. The manifest tool prints the file count, the manifest SHA-256 and the tool inventory SHA-256 that a host pins. To send your first request to the bridge, follow the [tutorial](docs/guides/tutorials/first-check.md).
 
 ### Local video measurements
 
@@ -48,16 +52,22 @@ Audio extraction, palettes, contact strips and legacy summary files are deferred
 
 ## Measured
 
-At commit `e6e6405ba56a586ca197013a85e09ec57fc84e5f`, Python 3.12.14 passes 31 tests with no skips in each mode, including the optional producer dependencies:
+Test results for the documented baseline, with commit, environment and per-test outcomes, are in the latest generated [test report](docs/verification/reports/README.md). CI runs the suite in normal and `-O` modes on Python 3.12 without the optional libraries, verifies the source manifest and runs gitleaks. The producer's video tests need the full-dependency commands:
 
 ```
 uv run --no-project --python 3.12 --with numpy --with opencv-python-headless --with scenedetect python -B -m unittest discover -s tests -t .
 uv run --no-project --python 3.12 --with numpy --with opencv-python-headless --with scenedetect python -B -O -m unittest discover -s tests -t .
 ```
 
+## Limitations
+
+- Results judge measurements the caller supplies. A pass is not acceptance of a film, cut or mix; the client stays the acceptance authority.
+- Default rules, the mix contract and the look thresholds come from one reference production run and are mostly marked `CHECK` in Evidence.
+- See [Limitations](docs/guides/explanation/limitations.md).
+
 ## Documentation
 
-See [docs/README.md](docs/README.md): requirements, architecture, interface control, verification matrix, configuration management.
+See [docs/README.md](docs/README.md): tutorial, how-to guides, tool reference, explanation, and the control documents (management plan, requirements, design, interface, data dictionary, test plan, verification matrix, configuration management, test reports, version descriptions, assurance record).
 
 Evidence citations default to the relative locations `docs/PLAYBOOK-film.md` and
 `tools/film/`. Set `FOUNDATION_FILM_PLAYBOOK` and `FOUNDATION_FILM_PRODUCERS` before
@@ -87,12 +97,12 @@ the tools do not open these files or require them to exist in this repository.
 | `foundation_film_bridge/` | stdio JSON-RPC bridge and schemas |
 | `tests/` | Unit and bridge tests |
 | `tools/` | Manifest and data tools |
-| `docs/` | Requirements, architecture, ICD, verification, configuration, guides |
+| `docs/` | Control documents and guides |
 | `SOURCE-MANIFEST.json` | SHA-256 of every shipped source file outside root `.github/` |
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md). Help: [SUPPORT.md](SUPPORT.md).
 
 ## Security
 
