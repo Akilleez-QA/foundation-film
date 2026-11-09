@@ -16,14 +16,17 @@ This repository is a separate judge. A program sends the measurements it already
 ## How it works
 
 ```mermaid
-flowchart LR
-    V["Video file"] -. "optional: filmstats<br/>(offline, needs OpenCV)" .-> M["Shot measurements<br/>JSON"]
+flowchart TD
+    V["Video file"] -.-> F["filmstats<br/>optional, offline"]
+    F -.-> M["Shot measurements"]
     P["Producer<br/>film pipeline, script<br/>or AI agent"] --> M
-    M -- "one JSON request per line<br/>on stdin" --> B["Bridge<br/>checks size, integers<br/>and message shape"]
-    B --> T["Tool<br/>checks its arguments,<br/>compares with thresholds"]
-    T --> R["Receipt<br/>checks + verdict + Evidence +<br/>request hash + boundary"]
-    R -- "one JSON line on stdout" --> P
+    M --> B["Bridge<br/>checks the request"]
+    B --> T["Tool<br/>compares with thresholds"]
+    T --> R["Receipt<br/>checks, verdict, Evidence"]
+    R --> P
 ```
+
+The dotted path is optional: `filmstats` measures shots from a video file offline and needs OpenCV. The bridge checks each request's size, integers and message shape. The tool checks its arguments and compares the measurements with thresholds. The receipt carries the checks and verdict, Evidence, the request hash and the boundary flags.
 
 The **bridge** is the small server process your program talks to. It speaks JSON-RPC 2.0 over standard input and output, one message per line. You start it, send `initialize`, then any number of `tools/call` requests, then close stdin. All values cross the wire as integers in thousandths, so results are repeatable: -14200 means -14.2 LUFS, 980 means 0.980, and a field ending in `_permille` uses per-mille (20 means 2 %).
 
