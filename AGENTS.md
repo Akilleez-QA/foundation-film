@@ -47,8 +47,8 @@ python -B -O -m unittest discover -s tests -t .
 For offline producer changes, also run both full-dependency checks from README:
 
 ```sh
-uv run --no-project --python 3.12 --with numpy --with opencv-python-headless --with scenedetect python -B -m unittest discover -s tests -t .
-uv run --no-project --python 3.12 --with numpy --with opencv-python-headless --with scenedetect python -B -O -m unittest discover -s tests -t .
+uv run --no-project --python 3.12 --with numpy --with opencv-python-headless --with "scenedetect>=0.7.2" python -B -m unittest discover -s tests -t .
+uv run --no-project --python 3.12 --with numpy --with opencv-python-headless --with "scenedetect>=0.7.2" python -B -O -m unittest discover -s tests -t .
 ```
 
 CI runs normal and optimized tests through `uv` on Python 3.12, Gitleaks, and

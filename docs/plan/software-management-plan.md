@@ -3,11 +3,11 @@
 | Field | Value |
 |---|---|
 | Document ID | FFILM-SMP |
-| Version | 1.0 |
+| Version | 1.1 |
 | Status | Draft |
 | Owner | Akilleez-QA |
-| Date | 2026-11-08 |
-| Baseline commit | 852f976aacaf8f08618bd0f37777f37822ce2614 |
+| Date | 2026-11-10 |
+| Baseline commit | 1fb04eab1d174ae0443cd0a7604ea9bcac75d168 |
 | Applies to | foundation-film main at baseline commit |
 | Classification | Self-assessed Class E analog; not safety-critical (see SMP §1) |
 
@@ -39,14 +39,14 @@ Trunk-based development on `main`. Each change is a pull request with one concer
 | Language runtime | CPython 3.12 in CI; the code uses no syntax newer than 3.11 | `.github/workflows/ci.yml` |
 | Runtime dependencies | None for the bridge and tools (REQ-FILM-011). The offline producer needs NumPy, opencv-python-headless and scenedetect | README |
 | Test runner | `unittest` (standard library) | ci.yml |
-| Optional test dependencies | The producer libraries; without them four tests are skipped (always in CI) | `tests/test_filmstats.py` |
+| Optional test dependencies | The producer libraries; without them four tests are skipped (in CI job `tests`; job `producer` installs them) | `tests/test_filmstats.py` |
 | Static analysis / type check | None in CI | — |
 | Secret scan | gitleaks 8.28.0 with default rules | ci.yml, `.gitleaks.toml` |
 | CI | GitHub Actions, `ubuntu-latest`, jobs `tests`, `gitleaks`, `manifest` | `.github/workflows/ci.yml` |
 
 ## 5. Verification and validation approach
 
-Verification: pull-request review, the unit, bridge and limit tests in both normal and `-O` modes, the manual producer tests (test plan TP-2), the trace check and the manifest check. Records: [verification matrix](../verification/verification-matrix.md), generated [test reports](../verification/reports/README.md) and the [assurance record](../assurance/assurance-record.md). Procedures: [test plan](../verification/test-plan.md).
+Verification: pull-request review, the unit, bridge and limit tests in both normal and `-O` modes, the producer tests (CI job `producer`, and test plan TP-2 locally), the trace check and the manifest check. Records: [verification matrix](../verification/verification-matrix.md), generated [test reports](../verification/reports/README.md) and the [assurance record](../assurance/assurance-record.md). Procedures: [test plan](../verification/test-plan.md).
 
 Validation: parity tests show the integer tools reproduce the reference scripts' outcomes on seeded random inputs (REQ-FILM-021); fixed cases replay numbers from one reference production run. No validation across other films exists.
 
@@ -99,8 +99,8 @@ Reviewed at every release; likelihood (L) and consequence (C) 1 to 5.
 |---|---|---|---|---|---|---|
 | R-1 | A user treats `thresholds_met` as acceptance of delivered work | 2 | 3 | Boundary block in every receipt; limitations page; Evidence wording | Open | — |
 | R-2 | Defaults from one reference run misjudge other films | 4 | 2 | Evidence marks them `CHECK`; caller overrides are named | Open | — |
-| R-3 | Producer regressions go unnoticed because CI skips its video tests | 3 | 2 | TP-2 manual run required for producer changes | Open | — |
-| R-4 | A producer library update breaks it (scenedetect already warns that `get_seconds()` is deprecated) | 3 | 2 | SAR finding; pin or update the call | Open | — |
+| R-3 | Producer regressions go unnoticed because CI skips its video tests | 3 | 2 | CI job `producer` runs the video tests and fails if the libraries are missing (commit 1fb04ea) | Closed | — |
+| R-4 | A producer library update breaks it (scenedetect deprecated `get_seconds()`) | 3 | 2 | `get_seconds()` replaced by the `seconds` property (commit 1fb04ea); CI job `producer` runs with `scenedetect>=0.7.2` and a video test fails on any deprecation warning from the producer, so a breaking release is caught | Mitigated | — |
 | R-5 | A host runs stale code because the manifest was not regenerated | 2 | 3 | CI `manifest` job; manifest test; host repins | Mitigated | — |
 
 ## 13. Measurement
@@ -120,3 +120,4 @@ See the [documentation index](../README.md).
 | Version | Date | Commit | Change | Reviewed in |
 |---|---|---|---|---|
 | 1.0 | 2026-11-08 | 852f976 | Initial baseline | docs/nasa-standard PR |
+| 1.1 | 2026-11-10 | 1fb04ea | R-3 closed and R-4 mitigated: CI runs the producer video tests and the deprecated scenedetect call is gone | findings-sweep PR |

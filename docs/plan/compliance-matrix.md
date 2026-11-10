@@ -3,10 +3,10 @@
 | Field | Value |
 |---|---|
 | Document ID | FFILM-RMM |
-| Version | 1.0 |
+| Version | 1.1 |
 | Status | Draft |
 | Owner | Akilleez-QA |
-| Date | 2026-11-08 |
+| Date | 2026-11-10 |
 | Baseline commit | 852f976aacaf8f08618bd0f37777f37822ce2614 |
 | Applies to | foundation-film main at baseline commit |
 | Classification | Self-assessed Class E analog; not safety-critical (see SMP §1) |
@@ -62,10 +62,11 @@ Self-assessed class: Class E analog, not safety-critical. Baseline: Class E with
 | 087 / 088 / 089 | Peer review | A–C | Tailored | [PR template](../../.github/pull_request_template.md); SAR summary; no effort metrics |
 | 090 / 093 / 094 / 199 / 200 | Measurement | A–C (200: A–B) | Tailored | STR metrics block |
 | 201 / 202 | Non-conformances, severity | A–D / A–C | Applies | [issue templates](../../.github/ISSUE_TEMPLATE/); SMP §9 |
-| 203 / 204 | OSS defect assessment, process assessment | A–C / A–B | Tailored | No bridge dependencies; producer libraries unpinned (SMP §12 R-4); Dependabot for Actions; S1 root-cause note in the issue |
+| 203 / 204 | OSS defect assessment, process assessment | A–C / A–B | Tailored | No bridge dependencies; producer libraries unpinned apart from `scenedetect>=0.7.2` in CI (SMP §12 R-4); Dependabot for Actions; S1 root-cause note in the issue |
 
 ## Change history
 
 | Version | Date | Commit | Change | Reviewed in |
 |---|---|---|---|---|
 | 1.0 | 2026-11-08 | 852f976 | Initial baseline | docs/nasa-standard PR |
+| 1.1 | 2026-11-10 | 1fb04ea | SWE-203/204 row records the scenedetect lower bound | findings-sweep PR |

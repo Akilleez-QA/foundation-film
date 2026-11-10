@@ -3,11 +3,11 @@
 | Field | Value |
 |---|---|
 | Document ID | FFILM-DD |
-| Version | 1.0 |
+| Version | 1.1 |
 | Status | Draft |
 | Owner | Akilleez-QA |
-| Date | 2026-11-08 |
-| Baseline commit | 852f976aacaf8f08618bd0f37777f37822ce2614 |
+| Date | 2026-11-10 |
+| Baseline commit | 1fb04eab1d174ae0443cd0a7604ea9bcac75d168 |
 | Applies to | foundation-film main at baseline commit |
 | Classification | Self-assessed Class E analog; not safety-critical (see SMP §1) |
 
@@ -73,7 +73,7 @@ All default values: [defaults](defaults.md).
 | `--fps` (producer CLI) | float | 8.0 | Target sampling rate; the actual step is the native rate divided by a whole number | `foundation_film/filmstats.py` |
 | `--width` (producer CLI) | integer | 640 | Width frames are resized to; at least 6 | `foundation_film/filmstats.py` |
 
-Both environment variables are read once, when `foundation_film.tools` is imported. No test covers them (GAP-FILM-09).
+Both environment variables are read once, when `foundation_film.tools` is imported. `tests/test_gaps.py::GapFilmTests.test_gap_film_09_environment_changes_evidence_citations` covers both (REQ-FILM-029).
 
 ## 6. Operational limits
 
@@ -81,13 +81,14 @@ Both environment variables are read once, when `foundation_film.tools` is import
 |---|---|---|---|
 | Input frame | 65536 bytes | `server.decode_frame` | `tests/test_requirement_limits.py::RequirementLimitsTests.test_req_film_012_input_limits` |
 | Stream line | 65537 bytes including newline | `server.serve` | `tests/test_requirement_limits.py::RequirementLimitsTests.test_req_film_012_stream_frame_limit` |
-| Output frame | 1048576 bytes | `server.encode_response` | none (GAP-FILM-01) |
+| Output frame | 1048576 bytes | `server.encode_response` | `tests/test_gaps.py::GapFilmTests.test_gap_film_01_oversized_response_is_withheld_with_32002` |
 | JSON depth / nodes / string / integer digits | 32 / 16384 / 1024 / 15 | `server.decode_frame`, `server._integer` | `tests/test_requirement_limits.py::RequirementLimitsTests.test_req_film_012_input_limits` |
-| Request id | 128 characters, string or integer | `server.Bridge.dispatch` | none (GAP-FILM-04) |
-| Evidence entries per receipt | 1 to 16 | `outputSchema` | none (GAP-FILM-07) |
+| Request id | 128 characters, string or integer | `server.Bridge.dispatch` | `tests/test_gaps.py::GapFilmTests.test_gap_film_04_invalid_envelopes_methods_and_arguments` |
+| Evidence entries per receipt | 1 to 16 | `outputSchema` | `tests/test_gaps.py::GapFilmTests.test_gap_film_07_schema_check_rejects_nonconforming_results` |
 
 ## Change history
 
 | Version | Date | Commit | Change | Reviewed in |
 |---|---|---|---|---|
 | 1.0 | 2026-11-08 | 852f976 | Initial baseline | docs/nasa-standard PR |
+| 1.1 | 2026-11-10 | 1fb04ea | Tests named for the environment keys, output frame, request id and Evidence count limits (GAP-FILM-09, 01, 04 and 07 closed) | findings-sweep PR |

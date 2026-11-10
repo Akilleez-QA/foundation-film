@@ -1,10 +1,15 @@
 import importlib.util
+import os
 from pathlib import Path
 import subprocess
 import sys
 import tempfile
+from types import ModuleType, SimpleNamespace
 import unittest
+from unittest import mock
+import warnings
 
+from foundation_film import filmstats
 from foundation_film.cinema import cinematic_gate, reference_bands
 from foundation_film.filmstats import measure_shot, measure_video, milli
 
@@ -23,6 +28,53 @@ class FilmstatsBoundaryTests(unittest.TestCase):
                                  "import foundation_film.tools; import foundation_film.filmstats"],
                                 capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_producer_dependencies_are_present_where_ci_requires_them(self):
+        if os.environ.get("FOUNDATION_FILM_REQUIRE_PRODUCER") == "1":
+            self.assertTrue(VISION, "CI's producer job must install numpy, opencv-python-headless and scenedetect")
+
+    def test_scene_times_use_the_seconds_property_not_get_seconds(self):
+        class Timecode:
+            def __init__(self, seconds):
+                self.seconds = seconds
+
+        class Capture:
+            def __init__(self, path):
+                self.left = 60
+
+            def read(self):
+                self.left -= 1
+                return (self.left >= 0, SimpleNamespace(shape=(72, 96, 3)))
+
+            def release(self):
+                pass
+
+        class Manager:
+            def add_detector(self, detector):
+                pass
+
+            def detect_scenes(self, video, show_progress):
+                pass
+
+            def get_scene_list(self):
+                return [(Timecode(0.0), Timecode(3.0)), (Timecode(3.0), Timecode(6.0))]
+
+        cv2, scenedetect, detectors = ModuleType("cv2"), ModuleType("scenedetect"), ModuleType("scenedetect.detectors")
+        cv2.VideoCapture, cv2.INTER_AREA, cv2.resize = Capture, 3, lambda frame, size, interpolation: frame
+        scenedetect.SceneManager = Manager
+        scenedetect.open_video = lambda path: SimpleNamespace(frame_rate=10, duration=Timecode(6.0))
+        detectors.AdaptiveDetector = detectors.ContentDetector = lambda **options: options
+        calls = []
+
+        def shot(frames, start, end, fps):
+            calls.append((len(frames), start, end, fps))
+            return {"start_ms": milli(start), "end_ms": milli(end), "camera": "static", "metrics": {"sharp": 1}}
+
+        modules = {"cv2": cv2, "scenedetect": scenedetect, "scenedetect.detectors": detectors}
+        with mock.patch.dict(sys.modules, modules), mock.patch.object(filmstats, "measure_shot", shot):
+            result = measure_video("stub.avi")
+        self.assertEqual(calls, [(30, 0.0, 3.0, 10.0), (30, 3.0, 6.0, 10.0)])
+        self.assertEqual([(s["start_ms"], s["end_ms"]) for s in result["shots"]], [(0, 3000), (3000, 6000)])
 
 
 @unittest.skipUnless(VISION, "optional producer requires numpy, opencv-python-headless and scenedetect")
@@ -72,6 +124,12 @@ class FilmstatsVisionTests(unittest.TestCase):
             arguments = json.loads(result.stdout)
             self.assertEqual([(s["start_ms"], s["end_ms"]) for s in arguments["shots"]], [(0, 3000), (3000, 6000)])
             self.assertEqual(reference_bands(arguments)[1]["total_ms"], 6000)
+            with warnings.catch_warnings(record=True) as caught:
+                warnings.simplefilter("always")
+                self.assertEqual(measure_video(source, 8.0, 96)["shots"], arguments["shots"])
+            deprecated = [str(w.message) for w in caught if issubclass(w.category, DeprecationWarning)
+                          and Path(w.filename).name == "filmstats.py"]
+            self.assertEqual(deprecated, [])
             with self.assertRaises(OSError):
                 measure_video(Path(directory) / "missing.avi")
 
