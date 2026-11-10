@@ -9,13 +9,13 @@ python -B -m unittest discover -s tests -t .
 python -B -O -m unittest discover -s tests -t .
 ```
 
-CI runs both on Python 3.12 (see the [test plan](../../verification/test-plan.md)). Four producer tests are skipped unless the optional libraries are installed.
+CI runs both on Python 3.12 (see the [test plan](../../verification/test-plan.md)). Four producer tests are skipped unless the optional libraries are installed; CI's `producer` job installs them and runs them.
 
 ## Run the optional producer tests
 
 ```sh
-uv run --no-project --python 3.12 --with numpy --with opencv-python-headless --with scenedetect python -B -m unittest discover -s tests -t .
-uv run --no-project --python 3.12 --with numpy --with opencv-python-headless --with scenedetect python -B -O -m unittest discover -s tests -t .
+uv run --no-project --python 3.12 --with numpy --with opencv-python-headless --with "scenedetect>=0.7.2" python -B -m unittest discover -s tests -t .
+uv run --no-project --python 3.12 --with numpy --with opencv-python-headless --with "scenedetect>=0.7.2" python -B -O -m unittest discover -s tests -t .
 ```
 
 Expect `OK` with no skips. Run these after any change to `foundation_film/filmstats.py`.
@@ -23,7 +23,7 @@ Expect `OK` with no skips. Run these after any change to `foundation_film/filmst
 ## Measure a local video
 
 ```sh
-uv run --no-project --python 3.12 --with numpy --with opencv-python-headless --with scenedetect python -B -m foundation_film.filmstats sample.avi --fps 8 --width 640 > shots.json
+uv run --no-project --python 3.12 --with numpy --with opencv-python-headless --with "scenedetect>=0.7.2" python -B -m foundation_film.filmstats sample.avi --fps 8 --width 640 > shots.json
 ```
 
 `shots.json` holds `{"shots": [...]}`: one entry per detected shot with `start_ms`, `end_ms`, `camera` and milli-unit `metrics`. Pass it as the arguments of `reference_bands`, or add `bands` or `rules` and pass it to `cinematic_gate`. The producer keeps every sampled frame in memory, so lower `--fps` or `--width` for long videos. On a synthetic 6 s video with one hard cut, it returns two static shots, 0–3000 ms and 3000–6000 ms.

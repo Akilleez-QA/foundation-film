@@ -18,7 +18,6 @@ Each result is a bounded observation about measurements the caller supplied, wit
 - The mix contract, the look thresholds and the default cinematic rules come from one reference production run. Most are marked `CHECK` in Evidence and have not been calibrated on other films or looks.
 - The drift thresholds are starting values; their calibration is pending, as the Evidence says.
 - The producer records zero motion when optical flow finds too few features, so a `static` camera class is not proof that tracking worked.
-- No test validates results against the output schemas (GAP-FILM-07 in the [requirements](../../requirements/requirements.md#8-untested-behaviour-gaps)).
 
 ## Use in decisions
 

@@ -113,7 +113,7 @@ The last line is `OK (skipped=4)`. The four skipped tests need the optional vide
 `foundation_film.filmstats` detects shots in a video file of your own and measures each one: length, camera motion and visual measures. It needs NumPy, OpenCV and PySceneDetect, which [uv](https://docs.astral.sh/uv/) can fetch for one run:
 
 ```sh
-uv run --no-project --python 3.12 --with numpy --with opencv-python-headless --with scenedetect python -B -m foundation_film.filmstats sample.avi --fps 8 --width 640 > shots.json
+uv run --no-project --python 3.12 --with numpy --with opencv-python-headless --with "scenedetect>=0.7.2" python -B -m foundation_film.filmstats sample.avi --fps 8 --width 640 > shots.json
 ```
 
 The output is a `{"shots": [...]}` object you can send to `reference_bands` or `cinematic_gate`. This tool reads the video, so it runs outside the bridge. See [Measure a local video](docs/guides/how-to/README.md#measure-a-local-video).

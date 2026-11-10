@@ -3,11 +3,11 @@
 | Field | Value |
 |---|---|
 | Document ID | FFILM-SDD |
-| Version | 2.0 |
+| Version | 2.1 |
 | Status | Draft |
 | Owner | Akilleez-QA |
-| Date | 2026-11-08 |
-| Baseline commit | 852f976aacaf8f08618bd0f37777f37822ce2614 |
+| Date | 2026-11-10 |
+| Baseline commit | 1fb04eab1d174ae0443cd0a7604ea9bcac75d168 |
 | Applies to | foundation-film main at baseline commit |
 | Classification | Self-assessed Class E analog; not safety-critical (see SMP §1) |
 
@@ -79,13 +79,13 @@ Producer flow: video → content and adaptive shot boundaries (PySceneDetect) �
 |---|---|---|---|---|
 | C-CINEMA | `foundation_film/cinema.py` | Shot validation, duration-weighted percentiles, default rules from bands, per-segment weighted measures | arguments to verdict per segment or bands | REQ-FILM-001, REQ-FILM-002, REQ-FILM-020, REQ-FILM-021 |
 | C-AUDIO | `foundation_film/audio.py` | Mix contract with caller overrides, loudness, peak, voice over bed, cut-hit share, heard classes, WER | arguments to verdict and checks | REQ-FILM-003, REQ-FILM-020 |
-| C-DRIFT | `foundation_film/drift.py` | Per-frame series, thresholds with defaults for edge F1 and mask IoU, worst-frame gate, summary | arguments to verdict, first failing frame | REQ-FILM-004, REQ-FILM-021 |
+| C-DRIFT | `foundation_film/drift.py` | Per-frame series, thresholds with defaults for edge F1 and mask IoU, worst-frame gate, summary | arguments to verdict, first failing frame | REQ-FILM-004, REQ-FILM-020, REQ-FILM-021 |
 | C-CUES | `foundation_film/cues.py` | Provided ids, aliases, lane references, beat order, minimum gaps | arguments to verdict and lists of breaches | REQ-FILM-005 |
 | C-LOOK | `foundation_film/look.py` | Per-frame look checks against default or caller thresholds | arguments to verdict per frame | REQ-FILM-006, REQ-FILM-020, REQ-FILM-021 |
 | C-MEASURES | `foundation_film/measures.py` | Shared validation, bounds, `div_round`, `check` and `verdict` | values to validated values or ToolInputError | REQ-FILM-016, REQ-FILM-019 |
-| C-TOOLS | `foundation_film/tools.py` | Tool table, Evidence per tool (citation locations from two optional environment variables), input hash, boundary, error capture | name and arguments to isError, assessment, receipt | REQ-FILM-008, REQ-FILM-009, REQ-FILM-010, REQ-FILM-016, REQ-FILM-020 |
-| C-SERVER | `foundation_film_bridge/server.py`, `foundation_film_bridge/__main__.py` | Line framing, wire limits, JSON-RPC envelope, session state, response encoding, exit codes | stdin bytes to stdout bytes | REQ-FILM-011, REQ-FILM-012, REQ-FILM-014, REQ-FILM-017, REQ-FILM-018, REQ-FILM-022 |
-| C-SCHEMAS | `foundation_film_bridge/schemas.py` | JSON Schema input and output schema per tool; catalog order | none to tool definitions | REQ-FILM-015 |
+| C-TOOLS | `foundation_film/tools.py` | Tool table, Evidence per tool (citation locations from two optional environment variables), input hash, boundary, error capture | name and arguments to isError, assessment, receipt | REQ-FILM-008, REQ-FILM-009, REQ-FILM-010, REQ-FILM-016, REQ-FILM-020, REQ-FILM-028, REQ-FILM-029 |
+| C-SERVER | `foundation_film_bridge/server.py`, `foundation_film_bridge/__main__.py` | Line framing, wire limits, JSON-RPC envelope, session state, response encoding, exit codes | stdin bytes to stdout bytes | REQ-FILM-011, REQ-FILM-012, REQ-FILM-014, REQ-FILM-017, REQ-FILM-018, REQ-FILM-022, REQ-FILM-023, REQ-FILM-024, REQ-FILM-025, REQ-FILM-026, REQ-FILM-027 |
+| C-SCHEMAS | `foundation_film_bridge/schemas.py` | JSON Schema input and output schema per tool; catalog order | none to tool definitions | REQ-FILM-015, REQ-FILM-028 |
 | C-MANIFEST | `tools/build_manifest.py`, `SOURCE-MANIFEST.json` | Hash the shipped tree; print file count, manifest SHA-256 and inventory SHA-256 | tree to manifest and pins | REQ-FILM-007 |
 | C-PRODUCER | `foundation_film/filmstats.py` | Offline shot detection, optical-flow camera class, still statistics, milli rounding, CLI | local video path to shots JSON | REQ-FILM-013 |
 
@@ -134,7 +134,6 @@ Bridge memory is bounded by the 64 KiB input frame and the schema array limits. 
 - Default rules, contracts and thresholds come from one reference production run and are marked `CHECK` in Evidence where not yet calibrated. See the [defaults](../data/defaults.md).
 - A pass is a measured proxy for quality, never the outcome. The client remains the acceptance authority.
 - When optical flow finds too few features, the producer records zero motion for that pair, so `static` alone is not proof that motion tracking worked.
-- No test validates results against the output schemas (GAP-FILM-07).
 
 ## Change history
 
@@ -143,3 +142,4 @@ Bridge memory is bounded by the 64 KiB input frame and the schema array limits. 
 | 1.0 | 2026-10-30 | 5c37f74 | Context, components, tools, data flow, decisions | Initial commit |
 | 1.1 | 2026-11-01 | e6e6405 | Offline producer | PR #5 |
 | 2.0 | 2026-11-08 | 852f976 | Family standard: metadata, decisions, static and runtime views, component IDs with requirements, execution, failure handling, resources, quality attributes, limitations | docs/nasa-standard PR |
+| 2.1 | 2026-11-10 | 1fb04ea | Components list REQ-FILM-023 to 029 and C-DRIFT lists REQ-FILM-020. Removed the limitation that no test checks the output schemas (GAP-FILM-07 closed) | findings-sweep PR |

@@ -3,10 +3,10 @@
 | Field | Value |
 |---|---|
 | Document ID | FFILM-ICD-CSTACK |
-| Version | 2.1 |
+| Version | 2.2 |
 | Status | Draft |
 | Owner | Akilleez-QA |
-| Date | 2026-11-09 |
+| Date | 2026-11-10 |
 | Baseline commit | 852f976aacaf8f08618bd0f37777f37822ce2614 |
 | Applies to | foundation-film main at baseline commit |
 | Classification | Self-assessed Class E analog; not safety-critical (see SMP §1) |
@@ -50,13 +50,13 @@ Assessments: `reference_bands` returns `bands_measured`; the five judged tools r
 | Duplicate keys, a float, `NaN`/`Infinity`, invalid UTF-8 or JSON | `-32700`, `id: null` | Fix the encoder | `tests/test_bridge.py::BridgeTests.test_wire_profile_fails_closed` (duplicate, float, NaN) |
 | Frame over 65536 bytes, nesting over 32, over 16384 nodes, string over 1024 chars, integer over 15 digits | `-32002`, `id: null` | Split or shrink the request | `tests/test_requirement_limits.py::RequirementLimitsTests.test_req_film_012_input_limits` (each limit, at and one past) |
 | Line over 65537 bytes or without newline | `-32002`, then exit 2 | Restart the bridge | `tests/test_requirement_limits.py::RequirementLimitsTests.test_req_film_012_stream_frame_limit` (oversized line) |
-| Not an object, extra envelope field, wrong `jsonrpc`, empty method, `null` or over-long id | `-32600`, `id: null` | Fix the envelope | none (GAP-FILM-04) |
-| Unknown method | `-32601` | — | none (GAP-FILM-04) |
-| Wrong params fields, unknown tool, non-object `arguments` | `-32602` | — | unknown tool: `test_wire_profile_fails_closed` |
-| `tools/*` before `initialize`, or a second `initialize` | `-32000` | Initialize once | before-init: `test_wire_profile_fails_closed`; second init: none (GAP-FILM-02) |
-| Wrong `protocolVersion` | `-32001` | Use `foundation-film-jsonrpc/1` | none (GAP-FILM-02) |
-| Unexpected exception | `-32603`, no result | Report a problem | none (GAP-FILM-05) |
-| Response over 1048576 bytes | `-32002` "Result withheld" | Send fewer frames | none (GAP-FILM-01) |
+| Not an object, extra envelope field, wrong `jsonrpc`, empty method, `null` or over-long id | `-32600`, `id: null` | Fix the envelope | `tests/test_gaps.py::GapFilmTests.test_gap_film_04_invalid_envelopes_methods_and_arguments` |
+| Unknown method | `-32601` | — | `test_gap_film_04_invalid_envelopes_methods_and_arguments` |
+| Wrong params fields, unknown tool, non-object `arguments` | `-32602` | — | unknown tool: `test_wire_profile_fails_closed`; non-object `arguments`: `test_gap_film_04_invalid_envelopes_methods_and_arguments` |
+| `tools/*` before `initialize`, or a second `initialize` | `-32000` | Initialize once | before-init: `test_wire_profile_fails_closed`; second init: `test_gap_film_02_second_initialize_and_wrong_protocol_are_refused` |
+| Wrong `protocolVersion` | `-32001` | Use `foundation-film-jsonrpc/1` | `test_gap_film_02_second_initialize_and_wrong_protocol_are_refused` |
+| Unexpected exception | `-32603`, no result | Report a problem | `test_gap_film_05_unexpected_tool_exception_returns_32603_without_result` |
+| Response over 1048576 bytes | `-32002` "Result withheld" | Send fewer frames | `test_gap_film_01_oversized_response_is_withheld_with_32002` |
 | Arguments refused by the tool | Success envelope, `isError: true`, assessment `tool_error`, receipt `status: error`, Evidence present | Read `receipt.error` | `tests/test_bridge.py::BridgeTests.test_bad_arguments_are_a_tool_error_that_still_carries_evidence` |
 
 The input schemas are necessary, not sufficient: some rules (for example shots in time order without overlap, every shot carrying the same metric names, `cuts_with_hit` not above `cuts`) are enforced only in code and surface as `tool_error`.
@@ -111,3 +111,4 @@ The producer is a local command line program outside JSON-RPC. It takes a path, 
 | 1.2 | 2026-11-04 | 42a5e27 | Pin rule excludes the root `.github/` tree | PR #11 |
 | 2.0 | 2026-11-08 | 852f976 | Family standard. Added `ping` (missing from the method list). Corrected the numeric rule: floats are rejected for every message while parsing, and no decimal strings are used (the old text said "bounded decimal strings"). Error table with tests and gaps, identity table, security bounds, requirements trace | docs/nasa-standard PR |
 | 2.1 | 2026-11-09 | - | Evidence entries described with their real nesting (`evidence.basis.kind`, `evidence.status`), as `tools.py` `evidence()` builds them | PR fixing the 2026-11-09 backfill-review findings |
+| 2.2 | 2026-11-10 | 1fb04ea | Error table names the tests in `tests/test_gaps.py` that now cover the second `initialize`, wrong protocol, invalid envelope, unknown method, non-object arguments, unexpected exception and withheld result rows | findings-sweep PR |

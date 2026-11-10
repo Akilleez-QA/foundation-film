@@ -3,10 +3,10 @@
 | Field | Value |
 |---|---|
 | Document ID | FFILM-SCMP |
-| Version | 2.0 |
+| Version | 2.1 |
 | Status | Draft |
 | Owner | Akilleez-QA |
-| Date | 2026-11-08 |
+| Date | 2026-11-10 |
 | Baseline commit | 852f976aacaf8f08618bd0f37777f37822ce2614 |
 | Applies to | foundation-film main at baseline commit |
 | Classification | Self-assessed Class E analog; not safety-critical (see SMP §1) |
@@ -26,7 +26,7 @@ The maintainer (Akilleez-QA, Refrigeration.AI) owns the configuration, approves 
 | Tool inventory | SHA-256 of the canonical catalog (`tools/build_manifest.py --inventory`) | Pull request |
 | Default rules, contract and thresholds | Module constants in `foundation_film/*.py`, covered by the manifest | Pull request; parity tests |
 | Producer provenance | Endoforge main at `819fa8a6b3eea9cae5f1388eb67a78556ad65727`, `tools/film/filmstats.py`, adapted into `foundation_film/filmstats.py` | Pull request |
-| Producer libraries | NumPy, opencv-python-headless, scenedetect; unpinned, installed by `uv` at run time; not shipped | Not under configuration control |
+| Producer libraries | NumPy, opencv-python-headless, scenedetect; installed by `uv` at run time; not shipped. CI job `producer` and the documented commands require `scenedetect>=0.7.2`, the version the producer's scene-time call was checked against; NumPy and OpenCV are unpinned | Lower bound in `.github/workflows/ci.yml`; otherwise not under configuration control |
 | CI and repository automation | `.github/` tree, outside the manifest | Pull request |
 | Generated documents | See §6 | Regenerated, never hand-edited |
 | Baselines | A commit on `main`; a tag once releases begin | Branch names are mutable and are never baselines |
@@ -86,3 +86,4 @@ This plan is updated in the same pull request as any change to CI, the manifest 
 | 1.1 | 2026-11-01 | e6e6405 | Producer provenance, optional dependencies, `PR_BODY.md` exclusion | PR #5 |
 | 1.2 | 2026-11-04 | 42a5e27 | Manifest excludes the root `.github/` tree | PR #11 |
 | 2.0 | 2026-11-08 | 852f976 | Family standard. Removed the claim that trufflehog runs before every push (no trufflehog configuration exists in the repository; CI runs gitleaks). Recorded that `main` has no branch protection. Added identification, status accounting, audits, generated outputs and release steps | docs/nasa-standard PR |
+| 2.1 | 2026-11-10 | 1fb04ea | Producer libraries: scenedetect held at `>=0.7.2` in CI and the documented commands | findings-sweep PR |

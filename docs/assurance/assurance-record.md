@@ -3,17 +3,38 @@
 | Field | Value |
 |---|---|
 | Document ID | FFILM-SAR |
-| Version | 1.0 |
+| Version | 1.1 |
 | Status | Draft |
 | Owner | Akilleez-QA |
-| Date | 2026-11-08 |
-| Baseline commit | 852f976aacaf8f08618bd0f37777f37822ce2614 |
+| Date | 2026-11-10 |
+| Baseline commit | 1fb04eab1d174ae0443cd0a7604ea9bcac75d168 |
 | Applies to | foundation-film main at baseline commit |
 | Classification | Self-assessed Class E analog; not safety-critical (see SMP §1) |
 
 > Organized after [NPR 7150.2D](https://nodis3.gsfc.nasa.gov/displayAll.cfm?Internal_ID=N_PR_7150_002D_&page_name=all), [NASA-STD-8739.8B](https://standards.nasa.gov/standard/nasa/nasa-std-87398) and the [NASA Software Engineering Handbook](https://swehb.nasa.gov/display/SWEHBVD/7.18+-+Documentation+Guidance) documentation guidance. This is not a NASA compliance determination or certification. The software classification is a self-assessed analog (Class E, not safety-critical); no NASA authority, independent verification and validation, or hazard analysis is asserted. The document describes the implementation inspected at the baseline commit.
 
 Rolling record, newest entry first (SWEHB 5.21, 5.22, 5.23, 5.25, 5.26 and the 5.03 summary, tailored).
+
+## Entry 2026-11-10 — findings sweep, code commit 1fb04ea (findings-sweep PR)
+
+- Analyzed by: the family findings sweep, agent-assisted for the maintainer. Agent analysis is not independent.
+- Inputs: findings F-4 to F-9 and gaps GAP-FILM-01 to 10 from the 2026-11-08 entry; code commit 1fb04ea on branch `fix/findings-sweep`.
+- Changes: `tests/test_gaps.py` adds one or two tests per gap; `tests/test_filmstats.py` adds the scene-time and CI-dependency tests; `foundation_film/filmstats.py` uses the scenedetect `seconds` property; `.github/workflows/ci.yml` adds job `producer`.
+- Test strength: the code already behaved as the gaps describe, so each new gap test was also run against a scratch copy with that behaviour broken on purpose; all 11 broken copies failed their test. The scene-time test failed with `AttributeError` before the fix.
+
+### Results
+
+- `python3 -B -m unittest discover -s tests -t .` and the same with `-O`, on a clean export of the records commit: 44 tests, OK (4 skipped: the video tests, which need the optional libraries).
+- `uv run --no-project --python 3.12 --with numpy --with opencv-python-headless --with "scenedetect>=0.7.2" python -B -m unittest discover -s tests -t .` with `FOUNDATION_FILM_REQUIRE_PRODUCER=1`, normal and `-O`: 44 tests, OK, no skips.
+- `python3 -B tools/build_manifest.py --check`: passes.
+- Gap check (every listed gap has a test named after it): 10/10.
+- Trace check: not run. The trace tool is still not in this repository (F-6). The matrix was updated by hand: 29 requirements, each with a row; every new test traces to a requirement.
+- Gitleaks: not run locally; CI runs it on the full history.
+- Found while testing: `cue_vocabulary_check` cannot return `not_scored`, because any unmeasured order or gap involves an unknown id, which already fails `missing_ids`. The schema allows the value, so this is not a defect; the schema test records which assessments each tool can produce.
+
+### Findings closed
+
+F-4, F-5, F-7 and F-9 are closed in 1fb04ea; see the findings table below. F-6 (trace check and documentation generators not in the repository) and F-8 (no branch protection on `main`) stay open.
 
 ## Entry 2026-11-08 — baseline 852f976 (docs/nasa-standard PR)
 
@@ -70,12 +91,12 @@ Running the producer on a synthetic video printed two scenedetect deprecation wa
 | F-1 | S4 | Matrix cited the bridge test for the behaviour of four tools it only refuses | verification matrix 1.2 | — | Closed in this PR |
 | F-2 | S4 | Configuration document and AGENTS.md claimed trufflehog runs before every push; no trufflehog configuration exists; CI runs gitleaks | SCMP 1.2, `AGENTS.md` | — | Closed in this PR |
 | F-3 | S4 | ICD omitted `ping` and said decimal strings may cross the bridge; the bridge rejects all non-integer numbers | ICD 1.2 | — | Closed in this PR |
-| F-4 | S3 | No test validates results against the published output schemas | `tests/` | none filed | Open (test change, out of scope for a docs-only change) |
-| F-5 | S3 | CI never runs the producer's four video tests | `.github/workflows/ci.yml` | none filed | Open (CI change) |
+| F-4 | S3 | No test validates results against the published output schemas | `tests/` | none filed | Closed in 1fb04ea: `tests/test_gaps.py::GapFilmTests.test_gap_film_07_results_conform_to_each_output_schema` and `test_gap_film_07_schema_check_rejects_nonconforming_results` (REQ-FILM-028) |
+| F-5 | S3 | CI never runs the producer's four video tests | `.github/workflows/ci.yml` | none filed | Closed in 1fb04ea: CI job `producer`; `tests/test_filmstats.py::FilmstatsBoundaryTests.test_producer_dependencies_are_present_where_ci_requires_them` fails there if the libraries are missing |
 | F-6 | S4 | The trace check and the documentation generators are not in the repository, so generated pages have no freshness test | `tools/` | none filed | Open (add the foundation-robotics tools in a follow-up) |
-| F-7 | S3 | scenedetect warns that `get_seconds()` is deprecated; a future release may break the producer | `foundation_film/filmstats.py` lines 91 and 96 | none filed | Open (code change) |
+| F-7 | S3 | scenedetect warns that `get_seconds()` is deprecated; a future release may break the producer | `foundation_film/filmstats.py` lines 91 and 96 | none filed | Closed in 1fb04ea: uses the `seconds` property; `tests/test_filmstats.py::FilmstatsBoundaryTests.test_scene_times_use_the_seconds_property_not_get_seconds` |
 | F-8 | S4 | `main` has no branch protection | GitHub settings | none filed | Open (owner decision) |
-| F-9 | S3 | Ten behaviours have no test (GAP-FILM-01 to 10) | SRS §8 | none filed | Open |
+| F-9 | S3 | Ten behaviours have no test (GAP-FILM-01 to 10) | SRS §8 | none filed | Closed in 1fb04ea: one test per gap in `tests/test_gaps.py` (two for GAP-FILM-07); behaviour stated as REQ-FILM-023 to 029 and in REQ-FILM-005, 010 and 020 |
 
 ### Overall assessment
 
@@ -86,3 +107,4 @@ The code matches its documentation after the corrections above. All 22 requireme
 | Version | Date | Commit | Change | Reviewed in |
 |---|---|---|---|---|
 | 1.0 | 2026-11-08 | 852f976 | First entry | docs/nasa-standard PR |
+| 1.1 | 2026-11-10 | 1fb04ea | Findings-sweep entry; F-4, F-5, F-7 and F-9 closed | findings-sweep PR |
