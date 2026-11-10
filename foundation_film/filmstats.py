@@ -88,12 +88,12 @@ def measure_video(source, fps=8.0, width=640):
     if not math.isfinite(fps) or fps <= 0 or type(width) is not int or width < 6:
         raise ValueError("fps must be positive and finite; width must be an integer >= 6")
     video = open_video(str(source))
-    native, duration = video.frame_rate, video.duration.get_seconds()
+    native, duration = video.frame_rate, video.duration.seconds
     manager = SceneManager()
     manager.add_detector(AdaptiveDetector(min_scene_len=6))
     manager.add_detector(ContentDetector(threshold=30, min_scene_len=6))
     manager.detect_scenes(video, show_progress=False)
-    cuts = sorted({round(a.get_seconds(), 3) for a, _ in manager.get_scene_list()} | {0.0})
+    cuts = sorted({round(a.seconds, 3) for a, _ in manager.get_scene_list()} | {0.0})
     cap, frames = cv2.VideoCapture(str(source)), []
     step, index = max(1, round(native / fps)), 0
     try:
